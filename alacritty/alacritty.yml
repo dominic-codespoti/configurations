@@ -3,7 +3,7 @@ window:
   padding:
     x: 40
     y: 40
-  decorations: buttonless
+  decorations: None
   startup_mode: Maximized
   title: "Alacritty"
   class:
