@@ -1,0 +1,25 @@
+window:
+  opacity: 0.8
+  padding:
+    x: 40
+    y: 40
+  decorations: buttonless
+  startup_mode: Maximized
+  title: "Alacritty"
+  class:
+    instance: Alacritty
+    general: Alacritty
+
+scrolling:
+  history: 10000
+  multiplier: 3
+
+font:
+  normal:
+    family: MesloLGS NF
+  bold:
+    family: MesloLGS NF
+  italic:
+    family: MesloLGS NF
+  bold_italic:
+    family: MesloLGS NF
