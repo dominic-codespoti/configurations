@@ -15,6 +15,7 @@ scrolling:
   multiplier: 3
 
 font:
+  size: 14
   normal:
     family: MesloLGS NF
   bold:
