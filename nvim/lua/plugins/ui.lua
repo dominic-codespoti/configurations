@@ -16,4 +16,7 @@ return {
     {
         "voldikss/vim-floaterm"
     },
+    {
+        'romgrk/barbar.nvim'
+    }
 }

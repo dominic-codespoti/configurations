@@ -1,7 +1,7 @@
 return {
     {
         "nvim-treesitter/nvim-treesitter",
-        build = "TSUpdate",
+        build = ":TSUpdate",
         opts = {
             highlight = {
                 enable = true,
@@ -25,6 +25,7 @@ return {
     },
     {
         "jose-elias-alvarez/null-ls.nvim",
+        lazy = true,
         dependencies =
             {
                 {
@@ -36,10 +37,12 @@ return {
     },
     {
         "L3MON4D3/LuaSnip",
+        lazy = true,
         dependencies = { "rafamadriz/friendly-snippets" }
     },
     {
         "hrsh7th/nvim-cmp",
+        lazy = true,
         commit = "a9c701fa7e12e9257b3162000e5288a75d280c28",
         dependencies = {
             "saadparwaiz1/cmp_luasnip",
@@ -123,6 +126,7 @@ return {
                     end, { "i", "s" }),
                 },
                 sources = cmp.config.sources {
+                    { name = "copilot", priority = 1250 },
                     { name = "nvim_lsp", priority = 1000 },
                     { name = "luasnip", priority = 750 },
                     { name = "buffer", priority = 500 },
@@ -139,5 +143,8 @@ return {
     },
     {
         "jay-babu/mason-nvim-dap.nvim",
+    },
+    {
+        "rmagatti/goto-preview"
     }
 }
