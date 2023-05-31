@@ -1,6 +1,5 @@
-require("catppuccin").setup({
-	flavour = "mocha",
-	transparent_background = true,
+require("dracula").setup({
+    transparent_bg = true
 })
 
-vim.cmd.colorscheme "catppuccin"
+vim.cmd.colorscheme "dracula"

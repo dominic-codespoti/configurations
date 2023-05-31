@@ -21,3 +21,4 @@ vim.opt.clipboard:append { 'unnamed', 'unnamedplus' }
 
 vim.opt.ignorecase = true
 
+vim.opt.scrolloff = 8

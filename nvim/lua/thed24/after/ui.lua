@@ -2,7 +2,7 @@
 require("neo-tree").setup({
     window = {
         position = "left",
-        width = 30,
+        width = 40,
         mapping_options = {
             noremap = true,
             nowait = true,
@@ -53,9 +53,11 @@ vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
 vim.keymap.set('n', '<leader>fw', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>fe', builtin.diagnostics, {})
 
 -- Float Term
-vim.api.nvim_set_keymap('n', '<leader>t', ':FloatermNew --height=1 --width=0.4 --wintype=vsplit --name=tempterm --position=botright<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>t', ':FloatermToggle<CR>', { silent = true })
+vim.api.nvim_set_keymap('t', '<leader>t', '<C-\\><C-n>:FloatermToggle<CR>', { silent = true })
 
 -- Startup
 local startup = function()
@@ -97,11 +99,16 @@ local startup = function()
     }
 
     dashboard.section.buttons.val = {
-        dashboard.button( "e", "  New file" , ":ene <BAR> startinsert <CR>"),
-        dashboard.button( "q", "  Quit NVIM" , ":qa<CR>"),
+        dashboard.button( "e", "New file" , ":ene <BAR> startinsert <CR>"),
+        dashboard.button( "f", "Search" , ":Telescope fd <CR>"),
+        dashboard.button( "q", "Quit NVIM" , ":qa<CR>"),
     }
 
     return dashboard
 end
 
 require("alpha").setup(startup().config)
+
+-- Tabline
+vim.api.nvim_set_keymap('n', '<S-Tab>', '<Cmd>BufferPrevious<CR>', { silent = true })
+vim.api.nvim_set_keymap('n', '<Tab>', '<Cmd>BufferNext<CR>', { silent = true})

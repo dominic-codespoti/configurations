@@ -1,3 +1,6 @@
+-- Core
+require("neodev").setup({})
+
 -- Mason
 require("mason").setup()
 
@@ -58,3 +61,7 @@ require'nvim-treesitter.configs'.setup {
     context_commentstring = { enable = true, enable_autocmd = false },
 }
 
+-- Preview
+require('goto-preview').setup({
+    default_mappings = true,
+})
