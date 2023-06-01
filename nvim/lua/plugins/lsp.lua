@@ -1,44 +1,79 @@
 return {
     {
-        "nvim-treesitter/nvim-treesitter",
-        build = ":TSUpdate",
-        opts = {
-            highlight = {
-                enable = true,
-                disable = function(_, bufnr) return vim.api.nvim_buf_line_count(bufnr) > 10000 end,
-            },
-            incremental_selection = { enable = true },
-            indent = { enable = true },
-            autotag = { enable = true },
-            context_commentstring = { enable = true, enable_autocmd = false },
+        "folke/neodev.nvim",
+        lazy = true,
+        event = "InsertEnter",
+        opts = {}
+    },
+    {
+        "williamboman/mason.nvim",
+        lazy = false,
+        cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUninstall", "MasonUninstallAll", "MasonLog" },
+        build = ":MasonUpdate",
+        config = function ()
+            require("mason").setup()
+        end,
+        dependencies = {
+            {
+                "jay-babu/mason-nvim-dap.nvim",
+                priority = 200,
+            }
         }
     },
     {
-        "neovim/nvim-lspconfig",
-        dependencies =
-            {
-                {
-                    "williamboman/mason-lspconfig.nvim",
-                    cmd = { "LspInstall", "LspUninstall" },
+        "nvim-treesitter/nvim-treesitter",
+        cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
+        build = ":TSUpdate",
+        config = function ()
+            require('nvim-treesitter.configs').setup({
+                ensure_installed = { "c", "c_sharp", "lua", "vim", "vimdoc", "query", "javascript", "typescript", "bash", "haskell" },
+                highlight = {
+                    enable = true,
+                    disable = function(_, bufnr) return vim.api.nvim_buf_line_count(bufnr) > 10000 end,
                 },
+                incremental_selection = { enable = true },
+                indent = { enable = true },
+                autotag = { enable = true },
+                context_commentstring = { enable = true, enable_autocmd = false },
+            })
+        end
+    },
+    {
+        "neovim/nvim-lspconfig",
+        lazy = true,
+        config = function()
+            require "plugins.configs.lspconfig"
+        end,
+        dependencies = {
+            {
+                "williamboman/mason-lspconfig.nvim",
+                priority = 200,
+                cmd = { "LspInstall", "LspUninstall" },
+                config = function ()
+                    require("mason-lspconfig").setup({
+                        ensure_installed = { "lua_ls", "rust_analyzer", "csharp_ls", "vtsls", "terraformls", "bashls", "azure_pipelines_ls", "marksman", "powershell_es", "yamlls", "bicep" },
+                    })
+
+                    require("mason-lspconfig").setup_handlers {
+                        function (server_name) -- default handler (optional)
+                            require("lspconfig")[server_name].setup {}
+                        end,
+                    }
+                end
             },
+        }
     },
     {
         "jose-elias-alvarez/null-ls.nvim",
         lazy = true,
-        dependencies =
+        dependencies = {
             {
-                {
-                    "jay-babu/mason-null-ls.nvim",
-                    cmd = { "NullLsInstall", "NullLsUninstall" },
-                    opts = { handlers = {} },
-                },
-            }
-    },
-    {
-        "L3MON4D3/LuaSnip",
-        lazy = true,
-        dependencies = { "rafamadriz/friendly-snippets" }
+                "jay-babu/mason-null-ls.nvim",
+                priority = 200,
+                cmd = { "NullLsInstall", "NullLsUninstall" },
+                opts = { handlers = {} },
+            },
+        }
     },
     {
         "hrsh7th/nvim-cmp",
@@ -49,6 +84,28 @@ return {
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-path",
             "hrsh7th/cmp-nvim-lsp",
+            {
+                "L3MON4D3/LuaSnip",
+                dependencies = { "rafamadriz/friendly-snippets" },
+                opts = { history = true, updateevents = "TextChanged,TextChangedI" },
+                config = function(_, opts)
+                    local setup = require("plugins.configs.luasnip")
+                    setup(opts)
+                end,
+            },
+            {
+                "zbirenbaum/copilot.lua",
+                cmd = "Copilot auth",
+                config = function()
+                    require("copilot").setup({
+                        suggestion = {enabled = false},
+                        panel = {enabled = false},
+                    })
+                end,
+            },
+            {
+                "zbirenbaum/copilot-cmp",
+            },
         },
         event = "InsertEnter",
         opts = function()
@@ -136,15 +193,6 @@ return {
         end,
     },
     {
-        "b0o/SchemaStore.nvim",
-    },
-    {
         "mfussenegger/nvim-dap",
     },
-    {
-        "jay-babu/mason-nvim-dap.nvim",
-    },
-    {
-        "rmagatti/goto-preview"
-    }
 }

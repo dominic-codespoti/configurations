@@ -68,6 +68,7 @@
         "/Users/dominiccodespoti/.local/share/nvim/lazy/mini.comment/lua",
         "/Users/dominiccodespoti/.config/nvim/lua",
         "/Users/dominiccodespoti/.config/nvim/lua",
-        "${3rd}/luv/library"
+        "${3rd}/luv/library",
+        "${3rd}/luassert/library"
     ]
 }
