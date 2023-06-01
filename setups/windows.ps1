@@ -20,10 +20,25 @@ $profilePath = $PROFILE.CurrentUserAllHosts
 New-Item -ItemType File -Path $profilePath -Force
 
 $linesToAdd = @"
+# Aliases
 New-Alias v nvim
 
-Set-PSReadLineKeyHandler -Key Tab -Function Complete
+# Tab autocomplete
+Set-PSReadLineOption -EditMode Emacs
 
+# Remove bell noise
+Set-PSReadlineOption -BellStyle None
+
+# History
+Set-PSReadLineOption -HistorySearchCursorMovesToEnd
+Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
+Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
+
+# Clipboard
+Set-PSReadLineKeyHandler -Key Ctrl+C -Function Copy
+Set-PSReadLineKeyHandler -Key Ctrl+v -Function Paste
+
+# Starship
 Invoke-Expression (&starship init powershell)
 "@
 
