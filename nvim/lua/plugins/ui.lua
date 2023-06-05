@@ -47,7 +47,13 @@ return {
         keys = {
             { "<leader>tt", ":FloatermToggle<CR>" },
             { "<leader>tt", "<C-\\><C-n>:FloatermToggle<CR>", mode = "t" },
-        }
+        },
+        init = function ()
+            local is_windows = package.config:sub(1,1) == '\\'
+            if is_windows then
+                vim.g.floaterm_shell = 'powershell'
+            end
+        end
     },
     {
         'romgrk/barbar.nvim',
