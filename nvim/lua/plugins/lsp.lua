@@ -77,7 +77,7 @@ return {
     },
     {
         "hrsh7th/nvim-cmp",
-        lazy = true,
+        lazy = false,
         commit = "a9c701fa7e12e9257b3162000e5288a75d280c28",
         dependencies = {
             "saadparwaiz1/cmp_luasnip",
