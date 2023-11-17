@@ -2,7 +2,7 @@ return {
     {
         "folke/neodev.nvim",
         lazy = true,
-        event = "InsertEnter",
+        event = "BufEnter",
         opts = {}
     },
     {
@@ -40,7 +40,7 @@ return {
     },
     {
         "neovim/nvim-lspconfig",
-        lazy = true,
+        lazy = false,
         config = function()
             require "plugins.configs.lspconfig"
         end,
@@ -66,6 +66,7 @@ return {
     {
         "jose-elias-alvarez/null-ls.nvim",
         lazy = true,
+        event = "BufEnter",
         dependencies = {
             {
                 "jay-babu/mason-null-ls.nvim",
@@ -77,7 +78,7 @@ return {
     },
     {
         "hrsh7th/nvim-cmp",
-        lazy = false,
+        lazy = true,
         commit = "a9c701fa7e12e9257b3162000e5288a75d280c28",
         dependencies = {
             "saadparwaiz1/cmp_luasnip",
@@ -105,9 +106,12 @@ return {
             },
             {
                 "zbirenbaum/copilot-cmp",
+                config = function ()
+                    require("copilot_cmp").setup()
+                end
             },
         },
-        event = "InsertEnter",
+        event = "BufEnter",
         opts = function()
             local cmp = require "cmp"
             local snip_status_ok, luasnip = pcall(require, "luasnip")
@@ -128,7 +132,11 @@ return {
                 preselect = cmp.PreselectMode.None,
                 formatting = {
                     fields = { "kind", "abbr", "menu" },
-                    format = lspkind_status_ok and lspkind.cmp_format(astronvim.lspkind) or nil,
+                    format = lspkind_status_ok and lspkind.cmp_format({
+                        mode = "symbol",
+                        max_width = 50,
+                        symbol_map = { Copilot = "" }
+                    }),
                 },
                 snippet = {
                     expand = function(args) luasnip.lsp_expand(args.body) end,
