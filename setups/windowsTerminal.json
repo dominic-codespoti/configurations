@@ -61,13 +61,6 @@
                 "name": "Command Prompt"
             },
             {
-                "guid": "{51855cb2-8cce-5362-8f54-464b92b32386}",
-                "hidden": false,
-                "name": "Ubuntu",
-                "source": "CanonicalGroupLimited.Ubuntu_79rhkp1fndgsc"
-            },
-            {
-                "elevate": true,
                 "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
                 "hidden": false,
                 "name": "PowerShell",
@@ -78,12 +71,6 @@
                 "hidden": false,
                 "name": "Azure Cloud Shell",
                 "source": "Windows.Terminal.Azure"
-            },
-            {
-                "commandline": "powershell.exe -NoExit \"Start-Process powershell.exe -Verb RunAs\"",
-                "guid": "{ee971a6b-75a9-44c0-a7d8-6d3346760ea9}",
-                "hidden": false,
-                "name": "Admin PowerShell"
             }
         ]
     },

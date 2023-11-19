@@ -1,21 +1,18 @@
 # Install basic tools
-winget install -e --id Neovim.Neovim --accept-package-agreements --accept-source-agreements
-winget install -e --id Git.Git --accept-package-agreements --accept-source-agreements
-winget install -e --id Microsoft.VCRedist.2015+.x64 --accept-package-agreements --accept-source-agreements
-winget install -e --id Microsoft.DotNet.DesktopRuntime.7 --accept-package-agreements --accept-source-agreements
-winget install -e --id Starship.Starship --accept-package-agreements --accept-source-agreements
-winget install -e --id Microsoft.Powershell --accept-package-agreements --accept-source-agreements --source winget
-winget install -e --id Google.Chrome --accept-package-agreements --accept-source-agreements 
-winget install -e --id Microsoft.WindowsTerminal --accept-package-agreements --accept-source-agreements 
-winget install -e --id Microsoft.dotnet --accept-package-agreements --accept-source-agreements 
-winget install -e --id Yarn.Yarn --accept-package-agreements --accept-source-agreements 
-winget install -e --id Schniz.fnm --accept-package-agreements --accept-source-agreements 
-winget install -e --id Microsoft.VisualStudioCode --accept-package-agreements --accept-source-agreements 
-winget install -e --id 7zip.7zip --accept-package-agreements --accept-source-agreements 
-winget install -e --id zig.zig --accept-package-agreements --accept-source-agreements 
-
-# Envs
-$executingDir = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
+winget install  --id Neovim.Neovim --accept-package-agreements --accept-source-agreements
+winget install  --id Git.Git --accept-package-agreements --accept-source-agreements
+winget install  --id Microsoft.VCRedist.2015+.x64 --accept-package-agreements --accept-source-agreements
+winget install  --id Microsoft.DotNet.DesktopRuntime.7 --accept-package-agreements --accept-source-agreements
+winget install  --id Starship.Starship --accept-package-agreements --accept-source-agreements
+winget install  --id Microsoft.Powershell --source winget --accept-package-agreements --accept-source-agreements
+winget install  --id Google.Chrome --accept-package-agreements --accept-source-agreements 
+winget install  --id Microsoft.WindowsTerminal --accept-package-agreements --accept-source-agreements 
+winget install  --id Microsoft.dotnet --accept-package-agreements --accept-source-agreements 
+winget install  --id Yarn.Yarn --accept-package-agreements --accept-source-agreements 
+winget install  --id Schniz.fnm --accept-package-agreements --accept-source-agreements 
+winget install  --id Microsoft.VisualStudioCode --accept-package-agreements --accept-source-agreements 
+winget install  --id 7zip.7zip --accept-package-agreements --accept-source-agreements 
+winget install  --id zig.zig --accept-package-agreements --accept-source-agreements 
 
 # Setup configs
 $nvimLinkPath = Join-Path $HOME "AppData\Local\nvim"

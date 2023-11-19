@@ -20,6 +20,9 @@ Set-PSReadLineKeyHandler -Key Ctrl+v -Function Paste
 git config --global push.default current
 git config --global push.autoSetupRemote true
 
+# Fsm
+fnm env --use-on-cd | Out-String | Invoke-Expression
+
 # Starship
 Invoke-Expression (&starship init powershell)
 
