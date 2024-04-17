@@ -1,5 +1,6 @@
 # Aliases
 New-Alias v nvim
+New-Alias vc nvim "$HOME/AppData/Local/nvim/"
 
 # Tab autocomplete
 Set-PSReadLineOption -EditMode Emacs

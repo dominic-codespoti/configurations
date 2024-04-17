@@ -61,11 +61,12 @@ return {
     },
     {
         "lukas-reineke/indent-blankline.nvim",
+        main = "ibl",
         opts = function ()
             return require("plugins.configs.indentline")
         end,
         config = function (_, opts)
-            require("indent_blankline").setup(opts)
+            require("ibl").setup(opts)
         end
     },
 }
