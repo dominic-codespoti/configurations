@@ -64,17 +64,28 @@ return {
         }
     },
     {
-        "jose-elias-alvarez/null-ls.nvim",
+        "nvimtools/none-ls.nvim",
+        main = "null-ls",
         lazy = true,
         event = "BufEnter",
         dependencies = {
             {
+                "nvimtools/none-ls-extras.nvim",
                 "jay-babu/mason-null-ls.nvim",
+                dependencies = { "williamboman/mason.nvim" },
                 priority = 200,
                 cmd = { "NullLsInstall", "NullLsUninstall" },
                 opts = { handlers = {} },
             },
-        }
+        },
+        config = function ()
+          local null_ls = require("null-ls")
+          null_ls.setup({
+            sources = {
+              require("none-ls.diagnostics.eslint_d"),
+            }
+          })
+        end
     },
     {
         "hrsh7th/nvim-cmp",
