@@ -51,7 +51,7 @@ return {
                 cmd = { "LspInstall", "LspUninstall" },
                 config = function ()
                     require("mason-lspconfig").setup({
-                        ensure_installed = { "lua_ls", "rust_analyzer", "csharp_ls", "vtsls", "terraformls", "bashls", "azure_pipelines_ls", "marksman", "powershell_es", "yamlls", "bicep" },
+                        ensure_installed = { "eslint_d", "lua_ls", "rust_analyzer", "csharp_ls", "vtsls", "terraformls", "bashls", "azure_pipelines_ls", "marksman", "powershell_es", "yamlls", "bicep" },
                     })
 
                     require("mason-lspconfig").setup_handlers {
