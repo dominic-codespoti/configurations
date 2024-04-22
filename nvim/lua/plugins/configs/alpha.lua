@@ -41,6 +41,7 @@ local startup = function()
 
     dashboard.section.buttons.val = {
         dashboard.button( "e", "New file" , ":ene <BAR> startinsert <CR>"),
+        dashboard.button( "n", "Notes", ":cd ~/Notes <CR> :e general.md <CR>"),
         dashboard.button( "f", "Search" , ":Telescope fd <CR>"),
         dashboard.button( "q", "Quit NVIM" , ":qa<CR>"),
     }

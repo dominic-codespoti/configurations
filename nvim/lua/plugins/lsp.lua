@@ -73,6 +73,7 @@ return {
                 "nvimtools/none-ls-extras.nvim",
                 "jay-babu/mason-null-ls.nvim",
                 dependencies = { "williamboman/mason.nvim" },
+                event = "BufEnter",
                 priority = 200,
                 cmd = { "NullLsInstall", "NullLsUninstall" },
                 opts = { handlers = {} },

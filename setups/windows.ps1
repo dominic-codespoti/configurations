@@ -1,39 +1,47 @@
-# Install basic tools
-winget install  --id Neovim.Neovim --accept-package-agreements --accept-source-agreements
-winget install  --id Git.Git --accept-package-agreements --accept-source-agreements
-winget install  --id Microsoft.VCRedist.2015+.x64 --accept-package-agreements --accept-source-agreements
-winget install  --id Microsoft.DotNet.DesktopRuntime.7 --accept-package-agreements --accept-source-agreements
-winget install  --id Starship.Starship --accept-package-agreements --accept-source-agreements
-winget install  --id Microsoft.Powershell --source winget --accept-package-agreements --accept-source-agreements
-winget install  --id Google.Chrome --accept-package-agreements --accept-source-agreements 
-winget install  --id Microsoft.WindowsTerminal --accept-package-agreements --accept-source-agreements 
-winget install  --id Microsoft.dotnet --accept-package-agreements --accept-source-agreements 
-winget install  --id Yarn.Yarn --accept-package-agreements --accept-source-agreements 
-winget install  --id Schniz.fnm --accept-package-agreements --accept-source-agreements 
-winget install  --id Microsoft.VisualStudioCode --accept-package-agreements --accept-source-agreements 
-winget install  --id 7zip.7zip --accept-package-agreements --accept-source-agreements 
-winget install  --id zig.zig --accept-package-agreements --accept-source-agreements 
+param (
+  [string[]]$packagesToSkip = @()
+)
 
-# Setup configs
-$nvimLinkPath = Join-Path $HOME "AppData\Local\nvim"
-$nvimTargetPath = Join-Path $HOME "AppData\Local\configurations\nvim"
-New-Item -ItemType SymbolicLink -Path $nvimLinkPath -Target $nvimTargetPath
+# Install basic tools
+foreach ($package in $packagesToInstall) {
+    winget install --id $package --accept-package-agreements --accept-source-agreements
+}
+
+# Install NVIM
+$nvimPowershellPath = Join-Path $PSScriptRoot "scripts/nvim.ps1"
+& $nvimPowershellPath
 
 # Setup profile
 $profilePath = $PROFILE.CurrentUserCurrentHost
 $profileDirectory = [System.IO.Path]::GetDirectoryName($profilePath)
-
 if (-not (Test-Path -Path $profileDirectory -PathType Container)) {
     New-Item -ItemType Directory -Path $profileDirectory -Force
 }
 
-$windowsPowershellPath = Join-Path $PSScriptRoot "windowsPowershell.ps1"
+$windowsPowershellPath = Join-Path $PSScriptRoot "content/powershell.ps1"
 $windowsPowershellContent = Get-Content -Path $windowsPowershellPath -Raw
 Set-Content -Path $profilePath -Value $windowsPowershellContent -Force
 
+# Add font
+$fontUrl = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/DroidSansMono.zip"
+$downloadPath = "$env:TEMP\DroidSansMono.zip"
+$extractPath = "$env:TEMP\DroidSansMono"
+
+Invoke-WebRequest -Uri $fontUrl -OutFile $downloadPath
+Expand-Archive -Path $downloadPath -DestinationPath $extractPath
+
+$fontFiles = Get-ChildItem -Path $extractPath -Filter "*.ttf"
+$installFontScript = Join-Path $PSScriptRoot "lib/Add-Font.ps1"
+foreach ($fontFile in $fontFiles) {
+  & $installFontScript -FontFile $fontFile.FullName
+}
+
+Remove-Item -Path $downloadPath -Force
+Remove-Item -Path $extractPath -Force
+
 # Setup terminal
 $terminalProfilePath = "$HOME\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
-$windowsTerminalPath = Join-Path $PSScriptRoot "windowsTerminal.json"
+$windowsTerminalPath = Join-Path $PSScriptRoot "content/windowsTerminal.json"
 $windowsTerminalContent = Get-Content -Path $windowsTerminalPath -Raw
 
 if (-not (Test-Path -Path $terminalProfilePath -PathType Leaf)) {
@@ -56,19 +64,16 @@ Move-Item -Path (Join-Path $starshipExtractPath "starship-master\starship.toml")
 Remove-Item -Path $starshipDownloadPath -Force
 Remove-Item -Path $starshipExtractPath -Force
 
-# Add font
-$fontUrl = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/DroidSansMono.zip"
-$downloadPath = "$env:TEMP\DroidSansMono.zip"
-$extractPath = "$env:TEMP\DroidSansMono"
-
-Invoke-WebRequest -Uri $fontUrl -OutFile $downloadPath
-Expand-Archive -Path $downloadPath -DestinationPath $extractPath
-
-$fontFiles = Get-ChildItem -Path $extractPath -Filter "*.ttf"
-foreach ($fontFile in $fontFiles) {
-    Add-Font -LiteralPath $fontFile.FullName
-}
-
-Remove-Item -Path $downloadPath -Force
-Remove-Item -Path $extractPath -Force
-
+# Locals
+$packagesToInstall = @(
+    'Git.Git',
+    'Microsoft.VCRedist.2015+.x64',
+    'Starship.Starship',
+    'Microsoft.Powershell',
+    'Microsoft.WindowsTerminal',
+    'Yarn.Yarn',
+    'Schniz.fnm',
+    'zig.zig',
+    'BurntSushi.ripgrep.MSVC',
+    'OpenJS.Node.js'
+) | Where-Object { $_ -notin $packagesToSkip }

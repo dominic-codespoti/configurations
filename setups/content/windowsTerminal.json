@@ -47,7 +47,7 @@
             "experimental.retroTerminalEffect": false,
             "font": 
             {
-                "face": "Cascadia Code"
+                "face": "DroidSansM Nerd Font Mono",
             },
             "opacity": 70,
             "padding": "16",
