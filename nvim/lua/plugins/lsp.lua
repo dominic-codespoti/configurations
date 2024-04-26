@@ -51,11 +51,11 @@ return {
                 cmd = { "LspInstall", "LspUninstall" },
                 config = function ()
                     require("mason-lspconfig").setup({
-                        ensure_installed = { "lua_ls", "rust_analyzer", "csharp_ls", "vtsls", "terraformls", "bashls", "azure_pipelines_ls", "marksman", "powershell_es", "yamlls", "bicep" },
+                        ensure_installed = { "lua_ls", "rust_analyzer", "omnisharp", "vtsls", "terraformls", "bashls", "azure_pipelines_ls", "azure_pipelines_ls", "marksman", "powershell_es", "yamlls", "bicep" },
                     })
 
                     require("mason-lspconfig").setup_handlers {
-                        function (server_name) -- default handler (optional)
+                        function (server_name)
                             require("lspconfig")[server_name].setup {}
                         end,
                     }
@@ -128,14 +128,16 @@ return {
             local cmp = require "cmp"
             local snip_status_ok, luasnip = pcall(require, "luasnip")
             local lspkind_status_ok, lspkind = pcall(require, "lspkind")
+
             if not snip_status_ok then return end
+
             local border_opts = {
                 border = "single",
                 winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
             }
 
             local function has_words_before()
-                local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+                local line, col = table.unpack(vim.api.nvim_win_get_cursor(0))
                 return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
             end
 
