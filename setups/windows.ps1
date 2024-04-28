@@ -50,6 +50,12 @@ if (-not (Test-Path -Path $terminalProfilePath -PathType Leaf)) {
 
 Set-Content -Path $terminalProfilePath -Value $windowsTerminalContent -Force
 
+# Setup WezTerm
+$weztermPath = Join-Path $PSScriptRoot "content/wezterm.lua"
+$weztermContent = Get-Content -Path $weztermPath -Raw
+$weztermNewPath = "$HOME\.wezterm.lua"
+Set-Content -Path $weztermNewPath -Value $weztermContent -Force
+
 # Setup starship
 $starshipDownloadUrl = "https://github.com/dracula/starship/archive/master.zip"
 $starshipDownloadPath = Join-Path $env:TEMP "starship.zip"
@@ -71,9 +77,9 @@ $packagesToInstall = @(
     'Starship.Starship',
     'Microsoft.Powershell',
     'Microsoft.WindowsTerminal',
-    'Yarn.Yarn',
-    'Schniz.fnm',
     'zig.zig',
     'BurntSushi.ripgrep.MSVC',
-    'OpenJS.Node.js'
+    'OpenJS.Node.js',
+    'Flow Launcher',
+    'wez.wezterm'
 ) | Where-Object { $_ -notin $packagesToSkip }
