@@ -63,7 +63,6 @@ return {
         dependencies = {
             'https://github.com/Issafalcon/neotest-dotnet',
             "nvim-lua/plenary.nvim",
-            "nvim-treesitter/nvim-treesitter",
             "antoinemadec/FixCursorHold.nvim"
         },
         keys = {
@@ -88,4 +87,8 @@ return {
             require("ibl").setup(opts)
         end
     },
+    {
+        "Hoffs/omnisharp-extended-lsp.nvim",
+        lazy = true
+    }
 }

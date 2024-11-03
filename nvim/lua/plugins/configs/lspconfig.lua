@@ -3,44 +3,92 @@ local M = {}
 M.capabilities = vim.lsp.protocol.make_client_capabilities()
 
 M.capabilities.textDocument.completion.completionItem = {
-  documentationFormat = { "markdown", "plaintext" },
-  snippetSupport = true,
-  preselectSupport = true,
-  insertReplaceSupport = true,
-  labelDetailsSupport = true,
-  deprecatedSupport = true,
-  commitCharactersSupport = true,
-  tagSupport = { valueSet = { 1 } },
-  resolveSupport = {
-    properties = {
-      "documentation",
-      "detail",
-      "additionalTextEdits",
+    documentationFormat = { "markdown", "plaintext" },
+    snippetSupport = true,
+    preselectSupport = true,
+    insertReplaceSupport = true,
+    labelDetailsSupport = true,
+    deprecatedSupport = true,
+    commitCharactersSupport = true,
+    tagSupport = { valueSet = { 1 } },
+    resolveSupport = {
+        properties = {
+            "documentation",
+            "detail",
+            "additionalTextEdits",
+        },
     },
-  },
+}
+
+require("lspconfig").omnisharp.setup {
+    capabilities = M.capabilities,
+    on_attach = M.on_attach,
+    enable_import_completion = true,
+    organize_imports_on_format = true,
+    enable_roslyn_analyzers = true,
+    root_dir = function ()
+        return vim.loop.cwd()
+    end,
+    handlers = {
+        ["textDocument/definition"] = function(...)
+            return require("omnisharp_extended").handler(...)
+        end,
+    },
+    keys = {
+        {
+            "gd",
+            function()
+                require("omnisharp_extended").telescope_lsp_definitions()
+            end,
+            desc = "Goto Definition",
+        },
+    },
+}
+
+require("lspconfig").yamlls.setup {
+    on_attach = M.on_attach,
+    capabilities = M.capabilities,
+    settings = {
+        yaml = {
+            keyOrdering = false,
+            completion = true,
+            format = { enable = true },
+            hover = true,
+            validate = true,
+            schemas = {
+                ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+                ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = {
+                    "/.devops/*.y*l",
+                    "/.pipelines/*.y*l",
+                    "/azure-pipeline*.y*l",
+                    "/pipelines/*.y*l",
+                },
+            }
+        },
+    },
 }
 
 require("lspconfig").lua_ls.setup {
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
+    on_attach = M.on_attach,
+    capabilities = M.capabilities,
 
-  settings = {
-    Lua = {
-      diagnostics = {
-        globals = { "vim" },
-      },
-      workspace = {
-        library = {
-          [vim.fn.expand "$VIMRUNTIME/lua"] = true,
-          [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
-          [vim.fn.stdpath "data" .. "/lazy/extensions/nvchad_types"] = true,
-          [vim.fn.stdpath "data" .. "/lazy/lazy.nvim/lua/lazy"] = true,
+    settings = {
+        Lua = {
+            diagnostics = {
+                globals = { "vim" },
+            },
+            workspace = {
+                library = {
+                    [vim.fn.expand "$VIMRUNTIME/lua"] = true,
+                    [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
+                    [vim.fn.stdpath "data" .. "/lazy/extensions/nvchad_types"] = true,
+                    [vim.fn.stdpath "data" .. "/lazy/lazy.nvim/lua/lazy"] = true,
+                },
+                maxPreload = 100000,
+                preloadFileSize = 10000,
+            },
         },
-        maxPreload = 100000,
-        preloadFileSize = 10000,
-      },
     },
-  },
 }
 
 vim.keymap.set('n', '<space>ld', vim.diagnostic.open_float)

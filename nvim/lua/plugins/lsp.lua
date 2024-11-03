@@ -1,8 +1,9 @@
+
 return {
     {
         "folke/neodev.nvim",
         lazy = true,
-        event = "BufEnter",
+        event = "BufReadPost",
         opts = {}
     },
     {
@@ -22,25 +23,44 @@ return {
     },
     {
         "nvim-treesitter/nvim-treesitter",
+        lazy = true,
+        event = "BufReadPost",
         cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
         build = ":TSUpdate",
         config = function ()
             require('nvim-treesitter.configs').setup({
-                ensure_installed = { "c", "c_sharp", "lua", "vim", "vimdoc", "query", "javascript", "typescript", "bash", "haskell" },
+                ensure_installed = { "c", "c_sharp", "lua", "vim", "query", "javascript", "typescript", "bash", "haskell" },
                 highlight = {
-                    enable = true,
-                    disable = function(_, bufnr) return vim.api.nvim_buf_line_count(bufnr) > 10000 end,
+                    enable = function(lang, bufnr)
+                        local max_filesize = 100 * 1024
+                        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
+                        if ok and stats and stats.size > max_filesize then
+                            return false
+                        end
+                        return true
+                    end,
                 },
-                incremental_selection = { enable = true },
-                indent = { enable = true },
-                autotag = { enable = true },
-                context_commentstring = { enable = true, enable_autocmd = false },
+                indent = {
+                    enable = false,
+                },
+                incremental_selection = {
+                    enable = true,
+                    is_supported = function()
+                        local mode = vim.api.nvim_get_mode().mode
+                        if mode == "c" then
+                            return false
+                        end
+                        return true
+                    end,
+                },
+                sync_install = false,
             })
         end
     },
     {
         "neovim/nvim-lspconfig",
-        lazy = false,
+        lazy = true,
+        event = "BufReadPost",
         config = function()
             require "plugins.configs.lspconfig"
         end,
@@ -51,7 +71,7 @@ return {
                 cmd = { "LspInstall", "LspUninstall" },
                 config = function ()
                     require("mason-lspconfig").setup({
-                        ensure_installed = { "lua_ls", "rust_analyzer", "omnisharp", "vtsls", "terraformls", "bashls", "azure_pipelines_ls", "azure_pipelines_ls", "marksman", "powershell_es", "yamlls", "bicep" },
+                        ensure_installed = { "lua_ls", "rust_analyzer", "omnisharp", "vtsls", "terraformls", "bashls", "azure_pipelines_ls", "marksman", "powershell_es", "yamlls", "bicep" },
                     })
 
                     require("mason-lspconfig").setup_handlers {
@@ -67,25 +87,25 @@ return {
         "nvimtools/none-ls.nvim",
         main = "null-ls",
         lazy = true,
-        event = "BufEnter",
+        event = "BufReadPost",
         dependencies = {
             {
                 "nvimtools/none-ls-extras.nvim",
                 "jay-babu/mason-null-ls.nvim",
                 dependencies = { "williamboman/mason.nvim" },
-                event = "BufEnter",
+                event = "BufReadPost",
                 priority = 200,
                 cmd = { "NullLsInstall", "NullLsUninstall" },
                 opts = { handlers = {} },
             },
         },
         config = function ()
-          local null_ls = require("null-ls")
-          null_ls.setup({
-            sources = {
-              require("none-ls.diagnostics.eslint_d"),
-            }
-          })
+            local null_ls = require("null-ls")
+            null_ls.setup({
+                sources = {
+                    require("none-ls.diagnostics.eslint_d"),
+                }
+            })
         end
     },
     {
@@ -123,7 +143,7 @@ return {
                 end
             },
         },
-        event = "BufEnter",
+        event = "BufReadPost",
         opts = function()
             local cmp = require "cmp"
             local snip_status_ok, luasnip = pcall(require, "luasnip")
@@ -217,4 +237,9 @@ return {
     {
         "mfussenegger/nvim-dap",
     },
+    {
+        "nvim-treesitter/playground",
+        cmd = "TSPlaygroundToggle",
+    },
 }
+
